@@ -518,6 +518,23 @@ function renderBudget() {
     wrap.appendChild(panel);
     container.appendChild(wrap);
   });
+
+  // Totals footer
+  const totalBudget = budget.reduce((s, b) => s + (b.amount || 0), 0);
+  const totalSpent  = budget.reduce((s, b) => s + (b.spends || []).reduce((ss, sp) => ss + sp.amount, 0), 0);
+  const totalLeft   = totalBudget - totalSpent;
+  const overAll     = totalSpent > totalBudget;
+  const lc          = overAll ? 'var(--expense)' : totalLeft < totalBudget * 0.2 ? 'var(--loan)' : 'var(--income)';
+
+  const footer = document.createElement('div');
+  footer.style.cssText = 'padding:9px 14px;border-top:2px solid var(--border);display:flex;align-items:center;gap:14px;font-size:11px;background:var(--surface2)';
+  footer.innerHTML = `
+    <span style="color:var(--muted);text-transform:uppercase;letter-spacing:0.5px">Total</span>
+    <span style="color:var(--muted)">Budget <strong style="color:var(--text)">${fmtN(totalBudget)}</strong></span>
+    <span style="color:var(--muted)">Used <strong style="color:var(--expense)">${fmtN(totalSpent)}</strong></span>
+    <span style="color:var(--muted)">Left <strong style="color:${lc}">${fmtN(Math.abs(totalLeft))}${overAll ? ' over!' : ''}</strong></span>
+  `;
+  container.appendChild(footer);
 }
 
 function togglePanel(id) {
