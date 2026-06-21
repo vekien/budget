@@ -490,7 +490,7 @@ function renderBudget() {
         <div class="brow-stats">
           <span class="bstat-budget">Budget ${fmtN(b.amount)}</span>
           <span class="bstat-used">Used ${fmtN(spent)}</span>
-          <span class="bstat-left" style="color:${lc}">Left ${fmtN(Math.abs(left))}${over ? ' over!' : ''}</span>
+          <span class="bstat-left" style="color:${lc}">${over ? '£'+Math.abs(left).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g,',')+' over!' : 'Left £'+left.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g,',')}</span>
         </div>
         <div class="bar"><div class="bar-fill" style="width:${pct}%;background:${bc}"></div></div>
       </div>
@@ -540,7 +540,7 @@ function renderBudget() {
     <span style="color:var(--muted);text-transform:uppercase;letter-spacing:0.5px">Total</span>
     <span style="color:var(--muted)">Budget <strong style="color:var(--text)">${fmtN(totalBudget)}</strong></span>
     <span style="color:var(--muted)">Used <strong style="color:var(--expense)">${fmtN(totalSpent)}</strong></span>
-    <span style="color:var(--muted)">Left <strong style="color:${lc}">${fmtN(Math.abs(totalLeft))}${overAll ? ' over!' : ''}</strong></span>
+    <span style="color:var(--muted)">Left <strong style="color:${lc}">${overAll ? '£'+Math.abs(totalLeft).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g,',')+' over!' : fmtN(totalLeft)}</strong></span>
   `;
   container.appendChild(footer);
 }
