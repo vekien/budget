@@ -209,8 +209,8 @@ header { background: var(--surface); border-bottom: 1px solid var(--border); pad
 <div class="overlay" id="import-modal">
   <div class="modal" style="max-width:480px">
     <h2>Import</h2>
-    <p style="font-size:12px;color:var(--muted);margin-bottom:14px;line-height:1.6">Paste your export code. A <strong style="color:var(--text)">full export</strong> (base64) restores everything. A <strong style="color:var(--text)">JSON array</strong> imports entries only.</p>
-    <div class="fg"><textarea id="imp-input" style="width:100%;height:90px;background:var(--bg);border:1px solid var(--border);border-radius:6px;padding:9px;color:var(--text);font-family:'Roboto Mono',monospace;font-size:11px;resize:none;outline:none;word-break:break-all" oninput="impDetect()" placeholder="Paste here..."></textarea></div>
+    <p style="font-size:12px;color:var(--muted);margin-bottom:14px;line-height:1.6">Paste your export code. A <strong style="color:var(--text)">full export</strong> (base64) restores everything. A <strong style="color:var(--text)">JSON array</strong> imports regular entries (bills/outgoings).</p>
+    <div class="fg"><textarea id="imp-input" style="width:100%;height:80px;background:var(--bg);border:1px solid var(--border);border-radius:6px;padding:9px;color:var(--text);font-family:'Roboto Mono',monospace;font-size:11px;resize:none;outline:none;word-break:break-all" oninput="impDetect()" placeholder="Paste here..."></textarea></div>
     <div id="imp-detect" style="font-size:11px;min-height:16px;margin-top:-5px;margin-bottom:8px"></div>
     <div class="fg" id="imp-person-row" style="display:none"><label>Wipe &amp; replace entries for</label>
       <select id="imp-person" style="background:var(--bg);border:1px solid var(--border);border-radius:6px;padding:7px 9px;color:var(--text);font-family:'Roboto',sans-serif;font-size:13px;outline:none;width:100%">
@@ -218,8 +218,16 @@ header { background: var(--surface); border-bottom: 1px solid var(--border); pad
       </select>
     </div>
     <div id="imp-err" style="display:none;color:var(--expense);font-size:12px;margin-bottom:8px"></div>
+
+    <div style="border-top:1px solid var(--border);margin-top:12px;padding-top:14px">
+      <p style="font-size:12px;color:var(--muted);margin-bottom:10px;line-height:1.6"><strong style="color:var(--text)">Import Budget Spends</strong> — paste a <code style="color:var(--accent)">{budget_spends:[...]}</code> JSON to bulk-load spend history into your Budget lines.</p>
+      <div class="fg"><textarea id="imp-spends-input" style="width:100%;height:80px;background:var(--bg);border:1px solid var(--border);border-radius:6px;padding:9px;color:var(--text);font-family:'Roboto Mono',monospace;font-size:11px;resize:none;outline:none;word-break:break-all" placeholder='{"budget_spends":[{"budgetId":"...","name":"Tesco","amount":25}]}'></textarea></div>
+      <div id="imp-spends-detect" style="font-size:11px;min-height:16px;margin-top:-5px;margin-bottom:4px;color:var(--muted)"></div>
+    </div>
+
     <div class="mactions">
       <button class="btn" onclick="closeModal('import-modal')">Cancel</button>
+      <button class="btn" onclick="doImportSpends()" style="border-color:var(--accent);color:var(--accent)">Import Spends</button>
       <button class="btn primary" onclick="doImport()">Import</button>
     </div>
   </div>
@@ -748,6 +756,32 @@ function migrateSharedToBudget() {
       data.budget.push({ id: e.id || Date.now().toString(), name: e.name, amount: e.amount, type: e.type || 'expense', spends: linkedSpends });
     }
   });
+}
+
+function doImportSpends() {
+  const raw = document.getElementById('imp-spends-input').value.trim();
+  const det = document.getElementById('imp-spends-detect');
+  if (!raw) { det.textContent = '✗ Paste the budget_spends JSON first.'; det.style.color = 'var(--expense)'; return; }
+
+  let parsed;
+  try { parsed = JSON.parse(raw); } catch(e) { det.textContent = '✗ Invalid JSON.'; det.style.color = 'var(--expense)'; return; }
+
+  const spends = parsed.budget_spends || parsed;
+  if (!Array.isArray(spends)) { det.textContent = '✗ Expected a budget_spends array.'; det.style.color = 'var(--expense)'; return; }
+
+  let added = 0, skipped = 0;
+  spends.forEach(sp => {
+    const b = (data.budget || []).find(x => x.id === sp.budgetId);
+    if (!b) { skipped++; return; }
+    if (!b.spends) b.spends = [];
+    b.spends.push({ id: Date.now().toString() + Math.random().toString(36).slice(2), name: sp.name || 'Spend', amount: parseFloat(sp.amount) || 0 });
+    added++;
+  });
+
+  save(); renderBudget(); renderCards();
+  det.textContent = '✓ Added ' + added + ' spends' + (skipped ? ' (' + skipped + ' skipped — budget ID not found)' : '');
+  det.style.color = 'var(--income)';
+  document.getElementById('imp-spends-input').value = '';
 }
 
 // ── EXPORT ────────────────────────────────────────────────────────────────────
