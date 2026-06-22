@@ -109,6 +109,7 @@ header { background: var(--surface); border-bottom: 1px solid var(--border); pad
 <header>
   <button class="btn" onclick="openImport()" style="border-color:#4ade80;color:#4ade80">Import</button>
   <button class="btn" onclick="openExport()" style="border-color:#fbbf24;color:#fbbf24">Export</button>
+  <button class="btn" onclick="resetSpends()" style="border-color:#f87171;color:#f87171">Reset</button>
 </header>
 
 <!-- ENTRY MODAL -->
@@ -782,6 +783,14 @@ function doImportSpends() {
   det.textContent = '✓ Added ' + added + ' spends' + (skipped ? ' (' + skipped + ' skipped — budget ID not found)' : '');
   det.style.color = 'var(--income)';
   document.getElementById('imp-spends-input').value = '';
+}
+
+function resetSpends() {
+  const totalSpends = (data.budget || []).reduce((s, b) => s + (b.spends || []).length, 0);
+  if (!confirm('Reset all budget spends for the new month?\n\nThis will clear ' + totalSpends + ' logged spend' + (totalSpends !== 1 ? 's' : '') + ' across all budget lines. Your budget amounts stay the same.')) return;
+  (data.budget || []).forEach(b => b.spends = []);
+  save(); renderBudget(); renderCards();
+  toast('Budget spends reset for new month');
 }
 
 // ── EXPORT ────────────────────────────────────────────────────────────────────
