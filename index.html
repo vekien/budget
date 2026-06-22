@@ -4,112 +4,150 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Budget Planner</title>
-<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet">
 <style>
 :root {
-  --bg: #0e0f11; --surface: #16181c; --surface2: #1e2126; --border: #2a2d35;
-  --text: #e8eaf0; --muted: #666c7a;
-  --income: #34d399; --expense: #f87171; --loan: #fbbf24; --accent: #818cf8;
-  --joint: #a78bfa; --groceries: #a3c439; --other: #fb923c; --fuel: #94a3b8;
-  --josh: #4ade80; --wife: #f472b6;
+  --bg: #09090b;
+  --surface: #111115;
+  --hover: #18181d;
+  --border: #1e1e24;
+  --text: #e4e4ef;
+  --sub: #6b6b80;
+  --income: #4ade80;
+  --expense: #f87171;
+  --loan: #f59e0b;
+  --accent: #818cf8;
+  --josh: #4ade80;
+  --wife: #f472b6;
+  --r: 10px;
+  --p: 12px 16px;
+  --gutter: 32px;
 }
 * { box-sizing: border-box; margin: 0; padding: 0; }
-body { background: var(--bg); color: var(--text); font-family: 'Roboto', sans-serif; font-size: 13px; min-height: 100vh; }
+body { background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; font-size: 13px; min-height: 100vh; }
 
-header { background: var(--surface); border-bottom: 1px solid var(--border); padding: 10px 24px; display: flex; gap: 8px; position: sticky; top: 0; z-index: 100; }
+.icon { font-family: 'Material Symbols Outlined'; font-weight: 300; font-style: normal; font-size: 18px; line-height: 1; letter-spacing: normal; text-transform: none; display: inline-block; white-space: nowrap; word-wrap: normal; direction: ltr; -webkit-font-feature-settings: 'liga'; font-feature-settings: 'liga'; -webkit-font-smoothing: antialiased; vertical-align: middle; }
 
-.btn { background: var(--surface2); border: 1px solid var(--border); color: var(--text); border-radius: 6px; padding: 5px 12px; cursor: pointer; font-family: 'Roboto', sans-serif; font-size: 11px; transition: all 0.15s; }
-.btn:hover { border-color: var(--accent); color: var(--accent); }
-.btn.primary { background: var(--accent); border-color: var(--accent); color: #fff; }
-.btn.primary:hover { opacity: 0.85; color: #fff; }
-.btn.danger { border-color: var(--expense); color: var(--expense); }
-.btn.danger:hover { background: var(--expense); color: #fff; }
-.btn.sm { padding: 3px 8px; font-size: 10px; }
+/* HEADER */
+header { padding: 0 var(--gutter); display: flex; align-items: center; gap: 4px; position: sticky; top: 0; z-index: 100; background: var(--bg); height: 52px; border-bottom: 1px solid var(--border); }
+.hbtn { background: none; border: none; color: var(--sub); cursor: pointer; font-family: 'Inter', sans-serif; font-size: 12px; font-weight: 500; padding: 6px 10px; border-radius: 6px; display: flex; align-items: center; gap: 5px; transition: background 0.1s, color 0.1s; }
+.hbtn:hover { background: var(--hover); color: var(--text); }
+.hbtn .icon { font-size: 16px; }
+.hbtn.green { color: var(--income); }
+.hbtn.green:hover { background: rgba(74,222,128,0.08); }
+.hbtn.yellow { color: var(--loan); }
+.hbtn.yellow:hover { background: rgba(245,158,11,0.08); }
+.hbtn.red { color: var(--expense); }
+.hbtn.red:hover { background: rgba(248,113,113,0.08); }
 
-.wrap { max-width: 1100px; margin: 0 auto; padding: 20px 24px; }
+/* WRAP */
+.wrap { max-width: 1100px; margin: 0 auto; padding: 24px var(--gutter); }
 
-.cards { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; margin-bottom: 20px; }
-.card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 18px 22px; text-align: center; }
-.card.clickable { cursor: pointer; transition: border-color 0.15s; }
-.card.clickable:hover { border-color: var(--income); }
-.card-label { font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--muted); margin-bottom: 6px; }
-.card-value { font-size: 30px; font-weight: 300; letter-spacing: -1px; }
-.card-sub { font-size: 11px; color: var(--muted); margin-top: 3px; }
+/* STATS ROW */
+.stats { display: grid; grid-template-columns: repeat(4,1fr); gap: 0; margin-bottom: 24px; background: var(--surface); border-radius: 12px; overflow: hidden; }
+.stat { padding: var(--p); }
+.stat + .stat { border-left: 1px solid var(--border); }
+.stat-label { font-size: 10px; font-weight: 600; color: var(--sub); text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 8px; }
+.stat-value { font-size: 30px; font-weight: 300; letter-spacing: -1px; line-height: 1; }
+.stat-sub { font-size: 11px; color: var(--sub); margin-top: 5px; }
+.stat.clickable { cursor: pointer; transition: background 0.12s; }
+.stat.clickable:hover { background: var(--hover); }
 .pos { color: var(--income); } .neg { color: var(--expense); } .acc { color: var(--accent); }
 
-.cols { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; align-items: start; }
+/* COLS */
+.cols { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; align-items: start; }
 
-.section { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; }
-.sec-header { padding: 11px 14px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
-.sec-title { font-size: 11px; letter-spacing: 1px; text-transform: uppercase; font-weight: 500; }
+/* SECTION */
+.section { margin-bottom: 24px; background: var(--surface); border-radius: 12px; overflow: hidden; }
+.sec-header { display: flex; align-items: center; justify-content: space-between; padding: var(--p); }
+.sec-title { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.8px; color: var(--sub); }
+.sec-add { background: none; border: none; color: var(--sub); cursor: pointer; font-family: 'Inter', sans-serif; font-size: 12px; display: flex; align-items: center; gap: 3px; padding: 4px 6px; border-radius: 6px; transition: background 0.1s, color 0.1s; }
+.sec-add:hover { background: var(--hover); color: var(--text); }
+.sec-add .icon { font-size: 16px; }
 
+/* ENTRIES */
 .entries { list-style: none; }
-.entry { display: flex; align-items: center; padding: 8px 14px; border-bottom: 1px solid var(--border); gap: 8px; cursor: pointer; transition: background 0.1s; min-height: 36px; }
-.entry:last-child { border-bottom: none; }
-.entry:hover { background: var(--surface2); }
-.entry-name { flex: 1; display: flex; align-items: center; gap: 5px; flex-wrap: nowrap; overflow: hidden; }
-.entry-name span { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.tag { font-size: 10px; background: var(--surface2); border: 1px solid var(--border); border-radius: 3px; padding: 1px 5px; color: var(--muted); white-space: nowrap; flex-shrink: 0; }
-.pbadge { font-size: 10px; border-radius: 3px; padding: 1px 5px; white-space: nowrap; flex-shrink: 0; }
-.pbadge.josh { color: var(--josh); background: rgba(74,222,128,0.08); border: 1px solid rgba(74,222,128,0.25); }
-.pbadge.wife { color: var(--wife); background: rgba(244,114,182,0.08); border: 1px solid rgba(244,114,182,0.25); }
-.ltag { font-size: 10px; border-radius: 3px; padding: 1px 5px; background: rgba(251,191,36,0.1); border: 1px solid rgba(251,191,36,0.25); color: var(--loan); white-space: nowrap; flex-shrink: 0; }
-.ltag.over { background: rgba(248,113,113,0.1); border-color: rgba(248,113,113,0.25); color: var(--expense); }
-.pct { font-size: 10px; color: var(--muted); width: 30px; text-align: right; flex-shrink: 0; }
-.amt { font-variant-numeric: tabular-nums; flex-shrink: 0; color: var(--expense); }
-.freq { font-size: 10px; color: var(--muted); margin-left: 2px; flex-shrink: 0; }
-.empty { padding: 9px 14px; color: var(--muted); display: flex; align-items: center; gap: 8px; }
-.footer { padding: 8px 14px; border-top: 1px solid var(--border); display: flex; align-items: center; gap: 10px; background: var(--surface2); font-size: 11px; color: var(--muted); }
-.footer .ftotal { margin-left: auto; color: var(--expense); font-variant-numeric: tabular-nums; }
+.entry { display: flex; align-items: center; padding: var(--p); gap: 10px; cursor: pointer; transition: background 0.1s; }
+.entry:hover { background: var(--hover); }
+.entry-name { flex: 1; display: flex; align-items: center; gap: 6px; overflow: hidden; min-width: 0; }
+.entry-name > span:first-child { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.tag { font-size: 10px; color: var(--sub); background: var(--hover); border-radius: 4px; padding: 1px 6px; white-space: nowrap; flex-shrink: 0; font-weight: 500; }
+.pbadge { font-size: 10px; border-radius: 4px; padding: 1px 6px; white-space: nowrap; flex-shrink: 0; font-weight: 600; }
+.pbadge.josh { color: var(--josh); }
+.pbadge.wife { color: var(--wife); }
+.ltag { font-size: 10px; color: var(--loan); background: rgba(245,158,11,0.08); border-radius: 4px; padding: 1px 6px; white-space: nowrap; flex-shrink: 0; }
+.ltag.over { color: var(--expense); background: rgba(248,113,113,0.08); }
+.pct { font-size: 11px; color: var(--sub); width: 30px; text-align: right; flex-shrink: 0; }
+.amt { font-variant-numeric: tabular-nums; flex-shrink: 0; color: var(--expense); font-weight: 500; font-size: 13px; }
+.freq { font-size: 11px; color: var(--sub); flex-shrink: 0; }
+.empty { padding: var(--p); color: var(--sub); font-size: 12px; }
 
-/* BUDGET */
-.brow { border-bottom: 1px solid var(--border); }
-.brow:last-child { border-bottom: none; }
-.brow-main { display: flex; align-items: center; gap: 8px; padding: 9px 14px; cursor: pointer; transition: background 0.1s; }
-.brow-main:hover { background: var(--surface2); }
-.brow-info { flex: 1; }
-.brow-name { display: flex; align-items: center; gap: 6px; margin-bottom: 3px; }
-.brow-stats { display: flex; gap: 12px; font-size: 11px; }
-.bstat-budget { color: var(--muted); }
-.bstat-used { color: var(--expense); }
-.bstat-left { font-weight: 500; }
-.bar { height: 3px; background: var(--border); border-radius: 2px; margin-top: 4px; overflow: hidden; }
-.bar-fill { height: 100%; border-radius: 2px; }
-.brow-actions { display: flex; gap: 4px; flex-shrink: 0; }
+/* FOOTER TOTALS */
+.list-total { display: flex; align-items: center; gap: 10px; padding: var(--p); border-top: 1px solid var(--border); font-size: 11px; color: var(--sub); }
+.list-total .t-amt { margin-left: auto; color: var(--expense); font-weight: 600; font-variant-numeric: tabular-nums; }
 
-.spend-panel { display: none; background: var(--bg); border-top: 1px solid var(--accent); }
+.brow { }
+.brow-main { display: flex; align-items: center; gap: 10px; padding: var(--p); cursor: pointer; transition: background 0.1s; }
+.brow-main:hover { background: var(--hover); }
+.brow-info { flex: 1; min-width: 0; }
+.brow-name { font-size: 13px; font-weight: 500; color: var(--text); margin-bottom: 3px; }
+.brow-stats { display: grid; grid-template-columns: 110px 90px 90px; font-size: 11px; color: var(--sub); align-items: center; }
+.bused { color: var(--expense); font-weight: 500; }
+.bleft { font-weight: 600; }
+.bar { height: 2px; background: var(--border); border-radius: 2px; margin-top: 6px; overflow: hidden; }
+.bar-fill { height: 100%; border-radius: 2px; transition: width 0.4s; }
+.brow-actions { display: flex; gap: 2px; flex-shrink: 0; }
+.iBtn { background: none; border: none; color: var(--sub); cursor: pointer; padding: 4px; border-radius: 5px; display: flex; align-items: center; transition: background 0.1s, color 0.1s; }
+.iBtn:hover { background: var(--hover); color: var(--text); }
+.iBtn .icon { font-size: 17px; }
+.iBtn.blue:hover { color: var(--accent); background: rgba(129,140,248,0.1); }
+.iBtn.green:hover { color: var(--income); background: rgba(74,222,128,0.08); }
+
+.spend-panel { display: none; background: rgba(0,0,0,0.2); }
 .spend-panel.open { display: block; }
-.spend-inner { padding: 10px 14px; }
-.spend-item { display: flex; align-items: center; gap: 8px; padding: 5px 0; border-bottom: 1px solid var(--border); font-size: 12px; }
+.spend-inner { padding: var(--p); }
+.spend-item { display: flex; align-items: center; gap: 10px; padding: 6px 0; border-bottom: 1px solid var(--border); font-size: 12px; }
 .spend-item:last-child { border-bottom: none; }
-.spend-name { flex: 1; color: var(--text); }
-.spend-amt { color: var(--expense); font-variant-numeric: tabular-nums; }
-.spend-total { display: flex; justify-content: flex-end; padding-top: 6px; margin-top: 2px; border-top: 1px solid var(--border); font-size: 11px; color: var(--muted); gap: 6px; }
+.spend-name { flex: 1; color: var(--sub); }
+.spend-amt { color: var(--expense); font-variant-numeric: tabular-nums; font-weight: 500; }
+.iBtn.del:hover { color: var(--expense); background: rgba(248,113,113,0.08); }
+.spend-total { display: flex; justify-content: flex-end; padding-top: 6px; font-size: 11px; color: var(--sub); gap: 6px; }
+
+/* BUDGET TOTAL ROW */
+.bfooter { display: flex; align-items: center; gap: 14px; padding: var(--p); font-size: 11px; color: var(--sub); border-top: 1px solid var(--border); }
 
 /* MODAL */
-.overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.65); z-index: 200; display: none; align-items: center; justify-content: center; padding: 20px; }
+.overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.75); z-index: 200; display: none; align-items: center; justify-content: center; padding: 20px; backdrop-filter: blur(4px); }
 .overlay.open { display: flex; }
-.modal { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; width: 100%; max-width: 400px; padding: 22px; animation: up 0.18s ease; }
-@keyframes up { from { transform: translateY(10px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
-.modal h2 { font-size: 17px; font-weight: 500; margin-bottom: 16px; }
-.fg { margin-bottom: 11px; }
-.fg label { display: block; font-size: 10px; letter-spacing: 1px; text-transform: uppercase; color: var(--muted); margin-bottom: 4px; }
-.fg input, .fg select { width: 100%; background: var(--bg); border: 1px solid var(--border); border-radius: 6px; padding: 7px 9px; color: var(--text); font-family: 'Roboto', sans-serif; font-size: 13px; outline: none; transition: border-color 0.15s; }
+.modal { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; width: 100%; max-width: 400px; padding: 24px; animation: up 0.16s ease; }
+@keyframes up { from { transform: translateY(8px) scale(0.98); opacity: 0; } to { transform: none; opacity: 1; } }
+.modal h2 { font-size: 15px; font-weight: 600; margin-bottom: 20px; }
+.fg { margin-bottom: 14px; }
+.fg label { display: block; font-size: 10px; font-weight: 600; letter-spacing: 0.8px; text-transform: uppercase; color: var(--sub); margin-bottom: 6px; }
+.fg input, .fg select { width: 100%; background: var(--bg); border: 1px solid var(--border); border-radius: 7px; padding: 9px 11px; color: var(--text); font-family: 'Inter', sans-serif; font-size: 13px; outline: none; transition: border-color 0.12s; }
 .fg input:focus, .fg select:focus { border-color: var(--accent); }
 .fg select option { background: var(--surface); }
-.frow { display: flex; gap: 9px; }
+.frow { display: flex; gap: 10px; }
 .frow .fg { flex: 1; }
-.mactions { display: flex; justify-content: flex-end; gap: 8px; margin-top: 16px; }
+.mactions { display: flex; justify-content: flex-end; gap: 8px; margin-top: 20px; padding-top: 16px; border-top: 1px solid var(--border); }
+.mbtn { background: var(--hover); border: none; color: var(--sub); border-radius: 7px; padding: 7px 14px; cursor: pointer; font-family: 'Inter', sans-serif; font-size: 12px; font-weight: 500; transition: background 0.1s, color 0.1s; }
+.mbtn:hover { color: var(--text); }
+.mbtn.primary { background: var(--accent); color: #fff; }
+.mbtn.primary:hover { opacity: 0.88; }
+.mbtn.danger { color: var(--expense); }
+.mbtn.danger:hover { background: rgba(248,113,113,0.12); }
 
-.toast { position: fixed; bottom: 20px; right: 20px; background: rgba(52,211,153,0.12); border: 1px solid var(--income); color: var(--income); border-radius: 8px; padding: 9px 16px; font-size: 12px; z-index: 400; animation: up 0.2s ease; }
+.toast { position: fixed; bottom: 20px; right: 20px; background: var(--surface); border: 1px solid var(--border); color: var(--income); border-radius: 8px; padding: var(--p); font-size: 12px; font-weight: 500; z-index: 400; animation: up 0.2s ease; display: flex; align-items: center; gap: 6px; }
+</style>
 </style>
 </head>
 <body>
 
 <header>
-  <button class="btn" onclick="openImport()" style="border-color:#4ade80;color:#4ade80">Import</button>
-  <button class="btn" onclick="openExport()" style="border-color:#fbbf24;color:#fbbf24">Export</button>
-  <button class="btn" onclick="resetSpends()" style="border-color:#f87171;color:#f87171">Reset</button>
+  <button class="hbtn green" onclick="openImport()"><span class="icon">upload</span> Import</button>
+  <button class="hbtn yellow" onclick="openExport()"><span class="icon">download</span> Export</button>
+  <button class="hbtn red" onclick="resetSpends()"><span class="icon">restart_alt</span> Reset</button>
 </header>
 
 <!-- ENTRY MODAL -->
@@ -146,9 +184,9 @@ header { background: var(--surface); border-bottom: 1px solid var(--border); pad
     <div class="fg"><label>Note</label><input id="em-note" placeholder="e.g. Car"></div>
     <input type="hidden" id="em-id">
     <div class="mactions">
-      <button class="btn danger" id="em-del" onclick="deleteEntry()" style="display:none;margin-right:auto">Delete</button>
-      <button class="btn" onclick="closeModal('entry-modal')">Cancel</button>
-      <button class="btn primary" onclick="saveEntry()">Save</button>
+      <button class="mbtn danger" id="em-del" onclick="deleteEntry()" style="display:none;margin-right:auto">Delete</button>
+      <button class="mbtn" onclick="closeModal('entry-modal')">Cancel</button>
+      <button class="mbtn primary" onclick="saveEntry()">Save</button>
     </div>
   </div>
 </div>
@@ -171,9 +209,9 @@ header { background: var(--surface); border-bottom: 1px solid var(--border); pad
     </div>
     <input type="hidden" id="bm-id">
     <div class="mactions">
-      <button class="btn danger" id="bm-del" onclick="deleteBudget()" style="display:none;margin-right:auto">Delete</button>
-      <button class="btn" onclick="closeModal('budget-modal')">Cancel</button>
-      <button class="btn primary" onclick="saveBudget()">Save</button>
+      <button class="mbtn danger" id="bm-del" onclick="deleteBudget()" style="display:none;margin-right:auto">Delete</button>
+      <button class="mbtn" onclick="closeModal('budget-modal')">Cancel</button>
+      <button class="mbtn primary" onclick="saveBudget()">Save</button>
     </div>
   </div>
 </div>
@@ -188,8 +226,8 @@ header { background: var(--surface); border-bottom: 1px solid var(--border); pad
     </div>
     <input type="hidden" id="sm-bid">
     <div class="mactions">
-      <button class="btn" onclick="closeModal('spend-modal')">Cancel</button>
-      <button class="btn primary" onclick="saveSpend()">Add</button>
+      <button class="mbtn" onclick="closeModal('spend-modal')">Cancel</button>
+      <button class="mbtn primary" onclick="saveSpend()">Add</button>
     </div>
   </div>
 </div>
@@ -200,8 +238,8 @@ header { background: var(--surface); border-bottom: 1px solid var(--border); pad
     <h2>Monthly Income</h2>
     <div class="fg"><label>Combined household £/mo</label><input id="inc-val" type="number" min="0" step="0.01"></div>
     <div class="mactions">
-      <button class="btn" onclick="closeModal('income-modal')">Cancel</button>
-      <button class="btn primary" onclick="saveIncome()">Save</button>
+      <button class="mbtn" onclick="closeModal('income-modal')">Cancel</button>
+      <button class="mbtn primary" onclick="saveIncome()">Save</button>
     </div>
   </div>
 </div>
@@ -227,9 +265,9 @@ header { background: var(--surface); border-bottom: 1px solid var(--border); pad
     </div>
 
     <div class="mactions">
-      <button class="btn" onclick="closeModal('import-modal')">Cancel</button>
-      <button class="btn" onclick="doImportSpends()" style="border-color:var(--accent);color:var(--accent)">Import Spends</button>
-      <button class="btn primary" onclick="doImport()">Import</button>
+      <button class="mbtn" onclick="closeModal('import-modal')">Cancel</button>
+      <button class="mbtn" style="border-color:var(--accent);color:var(--accent)" onclick="doImportSpends()" style="border-color:var(--accent);color:var(--accent)">Import Spends</button>
+      <button class="mbtn primary" onclick="doImport()">Import</button>
     </div>
   </div>
 </div>
@@ -248,8 +286,8 @@ header { background: var(--surface); border-bottom: 1px solid var(--border); pad
     <p id="exp-desc" style="font-size:11px;color:var(--muted);margin-bottom:8px"></p>
     <textarea id="exp-out" style="width:100%;height:160px;background:var(--bg);border:1px solid var(--border);border-radius:6px;padding:9px;color:var(--muted);font-family:'Roboto Mono',monospace;font-size:11px;resize:none;outline:none;word-break:break-all" readonly></textarea>
     <div class="mactions">
-      <button class="btn" onclick="closeModal('export-modal')">Close</button>
-      <button class="btn primary" id="exp-copy" onclick="copyExport()">Copy</button>
+      <button class="mbtn" onclick="closeModal('export-modal')">Close</button>
+      <button class="mbtn primary" id="exp-copy" onclick="copyExport()">Copy</button>
     </div>
   </div>
 </div>
@@ -270,51 +308,53 @@ header { background: var(--surface); border-bottom: 1px solid var(--border); pad
     </div>
     <input type="hidden" id="jm-id">
     <div class="mactions">
-      <button class="btn danger" id="jm-del" onclick="deleteJoint()" style="display:none;margin-right:auto">Delete</button>
-      <button class="btn" onclick="closeModal('joint-modal')">Cancel</button>
-      <button class="btn primary" onclick="saveJoint()">Save</button>
+      <button class="mbtn danger" id="jm-del" onclick="deleteJoint()" style="display:none;margin-right:auto">Delete</button>
+      <button class="mbtn" onclick="closeModal('joint-modal')">Cancel</button>
+      <button class="mbtn primary" onclick="saveJoint()">Save</button>
     </div>
   </div>
 </div>
 
 <div class="wrap">
-  <div class="cards" style="grid-template-columns:1fr 1fr 1fr 1fr">
-    <div class="card clickable" onclick="openIncome()" style="border-color:rgba(52,211,153,0.3);background:linear-gradient(135deg,var(--surface),rgba(52,211,153,0.04))">
-      <div class="card-label">Monthly Income</div>
-      <div class="card-value pos" id="card-inc-val">£0.00</div>
-      <div class="card-sub">click to edit</div>
+  <div class="stats" style="grid-template-columns:repeat(4,1fr)">
+    <div class="stat clickable" onclick="openIncome()">
+      <div class="stat-label">Monthly Income</div>
+      <div class="stat-value pos" id="card-inc-val">£0.00</div>
+      <div class="stat-sub">click to edit</div>
     </div>
-    <div class="card" style="border-color:rgba(248,113,113,0.3);background:linear-gradient(135deg,var(--surface),rgba(248,113,113,0.04))">
-      <div class="card-label">Total Outgoing</div>
-      <div class="card-value neg" id="card-out-val">£0.00</div>
-      <div class="card-sub" id="card-out-sub"></div>
+    <div class="stat">
+      <div class="stat-label">Total Outgoing</div>
+      <div class="stat-value neg" id="card-out-val">£0.00</div>
+      <div class="stat-sub" id="card-out-sub"></div>
     </div>
-    <div class="card" style="border-color:rgba(129,140,248,0.3);background:linear-gradient(135deg,var(--surface),rgba(129,140,248,0.04))">
-      <div class="card-label">Total Budget</div>
-      <div class="card-value acc" id="card-bud-val">£0.00</div>
-      <div class="card-sub" id="card-bud-sub"></div>
+    <div class="stat">
+      <div class="stat-label">Total Budget</div>
+      <div class="stat-value acc" id="card-bud-val">£0.00</div>
+      <div class="stat-sub" id="card-bud-sub"></div>
     </div>
-    <div class="card" style="border-color:rgba(129,140,248,0.2);background:linear-gradient(135deg,var(--surface),rgba(129,140,248,0.02))">
-      <div class="card-label">Remaining</div>
-      <div class="card-value" id="card-rem-val">£0.00</div>
-      <div class="card-sub" id="card-rem-sub"></div>
+    <div class="stat">
+      <div class="stat-label">Remaining</div>
+      <div class="stat-value" id="card-rem-val">£0.00</div>
+      <div class="stat-sub" id="card-rem-sub"></div>
     </div>
   </div>
 
   <div class="cols">
     <!-- LEFT: OUTGOINGS -->
-    <div class="section">
-      <div class="sec-header">
-        <span class="sec-title" style="color:var(--expense)">Outgoings</span>
-        <button class="btn" onclick="openEntry()">+ Add</button>
-      </div>
-      <ul class="entries" id="out-list"></ul>
-      <div class="footer" id="out-footer" style="display:none">
-        <span>Total</span>
-        <span id="out-fpct"></span>
-        <span id="out-frem" style="margin-left:auto"></span>
-        <span class="ftotal" id="out-ftotal"></span>
-        <span class="freq">/mo</span>
+    <div>
+      <div class="section">
+        <div class="sec-header">
+          <span class="sec-title" style="color:var(--expense)">Outgoings</span>
+          <button class="sec-add" onclick="openEntry()"><span class="icon">add</span> Add</button>
+        </div>
+        <ul class="entries" id="out-list"></ul>
+        <div class="list-total" id="out-footer" style="display:none">
+          <span>Total</span>
+          <span id="out-fpct"></span>
+          <span id="out-frem" style="margin-left:auto"></span>
+          <span class="t-amt" id="out-ftotal"></span>
+          <span class="freq">/mo</span>
+        </div>
       </div>
     </div>
 
@@ -322,21 +362,21 @@ header { background: var(--surface); border-bottom: 1px solid var(--border); pad
     <div>
       <div class="section">
         <div class="sec-header">
-          <span class="sec-title acc">Budget</span>
-          <button class="btn" onclick="openBudget()">+ Add</button>
+          <span class="sec-title" style="color:var(--accent)">Budget</span>
+          <button class="sec-add" onclick="openBudget()"><span class="icon">add</span> Add</button>
         </div>
         <div id="budget-list"></div>
       </div>
-      <div class="section" style="margin-top:16px">
+      <div class="section">
         <div class="sec-header">
           <span class="sec-title" style="color:var(--loan)">Joint Acc</span>
-          <button class="btn" onclick="openJoint()">+ Add</button>
+          <button class="sec-add" onclick="openJoint()"><span class="icon">add</span> Add</button>
         </div>
         <ul class="entries" id="joint-list"></ul>
-        <div class="footer" id="joint-footer" style="display:none">
+        <div class="list-total" id="joint-footer" style="display:none">
           <span>Total</span>
           <span style="margin-left:auto"></span>
-          <span class="ftotal" id="joint-ftotal"></span>
+          <span class="t-amt" id="joint-ftotal"></span>
           <span class="freq">/mo</span>
         </div>
       </div>
@@ -388,7 +428,7 @@ function renderCards() {
   document.getElementById('card-out-sub').textContent = ep !== null ? ep + '% of income' : '';
   const rv = document.getElementById('card-rem-val');
   rv.textContent = (net >= 0 ? '+' : '-') + fmtN(net);
-  rv.className = 'card-value ' + (net >= 0 ? 'pos' : 'neg');
+  rv.className = 'stat-value ' + (net >= 0 ? 'pos' : 'neg');
   document.getElementById('card-rem-sub').textContent = rp !== null ? rp + '% of income' : '';
   document.getElementById('card-rem-sub').style.color = rc;
 }
@@ -490,14 +530,14 @@ function renderBudget() {
         <div class="brow-name"><span>${b.name}</span></div>
         <div class="brow-stats">
           <span class="bstat-budget">Budget ${fmtN(b.amount)}</span>
-          <span class="bstat-used">Used ${fmtN(spent)}</span>
-          <span class="bstat-left" style="color:${lc}">${over ? '£'+Math.abs(left).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g,',')+' over!' : 'Left £'+left.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g,',')}</span>
+          <span class="bused">${fmtN(spent)}</span>
+          <span class="bleft" style="color:${lc}">${over ? fmtN(Math.abs(left))+' over!' : fmtN(left)}</span>
         </div>
         <div class="bar"><div class="bar-fill" style="width:${pct}%;background:${bc}"></div></div>
       </div>
       <div class="brow-actions">
-        <button class="btn sm" onclick="event.stopPropagation();openBudget('${b.id}')" title="Edit">✎</button>
-        <button class="btn sm" onclick="event.stopPropagation();openSpend('${b.id}')">+ Log</button>
+        <button class="iBtn blue" onclick="event.stopPropagation();openBudget('${b.id}')" title="Edit"><span class="icon">edit</span></button>
+        <button class="iBtn green" onclick="event.stopPropagation();openSpend('${b.id}')" title="Log spend"><span class="icon">add_circle</span></button>
       </div>
     `;
     wrap.appendChild(main);
@@ -514,7 +554,7 @@ function renderBudget() {
       spends.forEach(sp => {
         const row = document.createElement('div');
         row.className = 'spend-item';
-        row.innerHTML = `<span class="spend-name">${sp.name}</span><span class="spend-amt">-${fmtN(sp.amount)}</span><button class="btn sm danger" onclick="delSpend('${b.id}','${sp.id}')">✕</button>`;
+        row.innerHTML = `<span class="spend-name">${sp.name}</span><span class="spend-amt">-${fmtN(sp.amount)}</span><button class="iBtn del" onclick="delSpend('${b.id}','${sp.id}')"><span class="icon">close</span></button>`;
         inner.appendChild(row);
       });
       const tot = document.createElement('div');
@@ -536,12 +576,14 @@ function renderBudget() {
   const lc          = overAll ? 'var(--expense)' : totalLeft < totalBudget * 0.2 ? 'var(--loan)' : 'var(--income)';
 
   const footer = document.createElement('div');
-  footer.style.cssText = 'padding:9px 14px;border-top:2px solid var(--border);display:flex;align-items:center;gap:14px;font-size:11px;background:var(--surface2)';
+  footer.className = 'bfooter';
   footer.innerHTML = `
-    <span style="color:var(--muted);text-transform:uppercase;letter-spacing:0.5px">Total</span>
-    <span style="color:var(--muted)">Budget <strong style="color:var(--text)">${fmtN(totalBudget)}</strong></span>
-    <span style="color:var(--muted)">Used <strong style="color:var(--expense)">${fmtN(totalSpent)}</strong></span>
-    <span style="color:var(--muted)">Left <strong style="color:${lc}">${overAll ? '£'+Math.abs(totalLeft).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g,',')+' over!' : fmtN(totalLeft)}</strong></span>
+    <span style="font-weight:600;color:var(--text);margin-right:8px">Total</span>
+    <span style="display:grid;grid-template-columns:110px 90px 90px;font-size:11px">
+      <span style="color:var(--sub)">Budget ${fmtN(totalBudget)}</span>
+      <span style="color:var(--expense);font-weight:500">${fmtN(totalSpent)}</span>
+      <span style="color:${lc};font-weight:600">${overAll ? fmtN(Math.abs(totalLeft))+' over!' : fmtN(totalLeft)}</span>
+    </span>
   `;
   container.appendChild(footer);
 }
@@ -811,7 +853,7 @@ function copyExport() {
   navigator.clipboard.writeText(ta.value).then(() => { document.getElementById('exp-copy').textContent = '✓ Copied!'; setTimeout(()=>document.getElementById('exp-copy').textContent='Copy',2000); }).catch(()=>document.execCommand('copy'));
 }
 
-function toast(msg) { const t=document.createElement('div'); t.className='toast'; t.textContent='✓ '+msg; document.body.appendChild(t); setTimeout(()=>t.remove(),3000); }
+function toast(msg) { const t=document.createElement('div'); t.className='toast'; t.innerHTML='<span class="icon" style="color:var(--income)">check_circle</span> '+msg; document.body.appendChild(t); setTimeout(()=>t.remove(),3000); }
 
 // ── JOINT ACC ─────────────────────────────────────────────────────────────────
 function openJoint(id) {
